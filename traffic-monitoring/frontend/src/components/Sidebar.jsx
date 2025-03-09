@@ -12,7 +12,7 @@ import {
 
 const Sidebar = () => {
   const navItems = [
-    { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
+    { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
     { icon: Map, label: 'Traffic Map', path: '/map' },
     { icon: Activity, label: 'Live Monitoring', path: '/monitoring' },
     { icon: Camera, label: 'CCTV Feeds', path: '/cctv' },
