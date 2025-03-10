@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+"use client"
+
+import { useState } from "react"
+import { Star } from "lucide-react"
+
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
 
   // Scroll to section function
   const scrollToSection = (sectionId) => {
-    setIsOpen(false);
-    const section = document.getElementById(sectionId);
+    setIsOpen(false)
+    const section = document.getElementById(sectionId)
     if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
+      section.scrollIntoView({ behavior: "smooth" })
     }
-  };
+  }
 
   return (
     <nav className="bg-black text-white">
@@ -51,9 +55,18 @@ const Navbar = () => {
             >
               Team
             </button>
-            <button 
+            <a
+              href="https://github.com/ArshTiwari2004/Waygen"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center text-gray-300 hover:text-blue-300 transition-colors"
+            >
+              <Star className="h-4 w-4 mr-1" />
+              Star Repo
+            </a>
+            <button
               className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-6 py-2 shadow-lg shadow-blue-500/20"
-              onClick={() => window.location.href = '/dashboard'}
+              onClick={() => (window.location.href = "/dashboard")}
             >
               Get Started
             </button>
@@ -100,9 +113,18 @@ const Navbar = () => {
             >
               Team
             </button>
+            <a
+              href="https://github.com/yourusername/waygen"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center py-2 text-gray-300 hover:text-blue-300 transition-colors"
+            >
+              <Star className="h-4 w-4 mr-1" />
+              Star Repo
+            </a>
             <button
               className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-full py-2 shadow-lg shadow-blue-500/20"
-              onClick={() => window.location.href = '/dashboard'}
+              onClick={() => (window.location.href = "/dashboard")}
             >
               Get Started
             </button>
@@ -110,7 +132,8 @@ const Navbar = () => {
         </div>
       )}
     </nav>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar
+

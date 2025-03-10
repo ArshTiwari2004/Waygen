@@ -158,12 +158,12 @@ const teamMembers = [
 
 const Home = () => {
   return (
-    <div className="h-screen bg-black text-white">
+     <div className="min-h-screen w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 ">
       {/* Navbar */}
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative h-screen flex flex-col items-center justify-center text-center px-4">
+      <section className="relative h-screen flex flex-col items-center justify-center text-center px-4 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 ">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black z-10"></div>
           <video autoPlay loop muted className="w-full h-full object-cover">
@@ -182,13 +182,18 @@ const Home = () => {
           <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-100">
             AI-powered roads, seamless journeys – Built with MapMyIndia
           </p>
-          <Button
-            size="lg"
-            className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-8 shadow-lg shadow-blue-500/20"
-            onClick={() => window.location.href = '/dashboard'}
+          
+          <div className="flex justify-center items-center mt-6">
+         <Button
+           size="lg"
+           className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-full px-10 py-4 shadow-lg shadow-blue-500/30 font-medium flex items-center transition-all duration-300 text-lg"
+           onClick={() => window.location.href = '/dashboard'}
           >
-            Get Started <ArrowRight className="ml-2 h-4 w-4" />
+           Get Started <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
+         </div>
+
+
         </div>
 
         <div className="absolute bottom-10 left-0 right-0 z-10 flex justify-center">
@@ -235,7 +240,7 @@ const Home = () => {
             </div>
             <div className="rounded-lg overflow-hidden shadow-xl border border-gray-700">
               <img
-                src="/placeholder.svg?height=400&width=600"
+                src="/image.png?height=400&width=600"
                 alt="Traffic Management System"
                 className="w-full h-auto"
               />
@@ -326,14 +331,16 @@ const Home = () => {
           <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
             Join us in creating smarter, more efficient roads with AI-powered traffic solutions.
           </p>
-          <Button 
-            size="lg" 
-            className="bg-white text-blue-900 hover:bg-white/90 rounded-full px-8 shadow-lg"
-            onClick={() => window.location.href = '/dashboard'}
+          <div className="flex justify-center items-center mt-6">
+         <Button
+           size="lg"
+           className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-full px-10 py-4 shadow-lg shadow-blue-500/30 font-medium flex items-center transition-all duration-300 text-lg"
+           onClick={() => window.location.href = '/dashboard'}
           >
-            Get Started <ArrowRight className="ml-2 h-4 w-4" />
+           Get Started <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
-        </div>
+         </div>
+         </div>
       </section>
 
       {/* Footer */}
