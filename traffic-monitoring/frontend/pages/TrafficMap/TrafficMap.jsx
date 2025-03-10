@@ -53,9 +53,10 @@ const TrafficMap = () => {
     // Load Mappls API script dynamically
     const script = document.createElement("script");
     script.src = `https://apis.mappls.com/advancedmaps/api/${import.meta.env.VITE_MAPPLS_SDK_KEY}/map_sdk?v=3.0&layer=vector`;
-    // script.src = `https://apis.mappls.com/advancedmaps/v1/${import.meta.env.VITE_MAPPLS_SDK_KEY}/traffic?geojson=true`;
+    //script.src=`https://apis.mappls.com/advancedmaps/api/${import.meta.env.VITE_MAPPLS_SDK_KEY}/map_sdk_plugins?v=3.0&libraries=getPinDetails`;
+   // script.src = `https://apis.mappls.com/advancedmaps/v1/${import.meta.env.VITE_MAPPLS_SDK_KEY}/traffic?geojson=true`;
     script.async = true;
-
+    
     script.onload = () => {
       // Ensure Mappls is available
       if (window.mappls) {
@@ -67,6 +68,7 @@ const TrafficMap = () => {
       }
     };
     document.body.appendChild(script);
+    //Mappls.getPinDetails({ map: map, pin: '3F45CB'}, callback);
 
     return () => {
       document.body.removeChild(script); // Cleanup on unmount
