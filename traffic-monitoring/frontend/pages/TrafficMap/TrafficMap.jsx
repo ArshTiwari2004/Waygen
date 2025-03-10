@@ -1,188 +1,75 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { MapPin, Navigation, AlertTriangle } from 'lucide-react';
 
 const TrafficMap = () => {
-  const mapContainerRef = useRef(null);
-  const mapInitializedRef = useRef(false);
-  const [mapObject, setMapObject] = useState(null);
-  const [trafficData, setTrafficData] = useState({
-    high: 5,
-    medium: 8,
-    low: 12
-  });
-  const [alternativeRoutes, setAlternativeRoutes] = useState([
-    { from: 'Central Station', to: 'Business District', time: '15 mins' },
-    { from: 'North Avenue', to: 'Shopping Mall', time: '12 mins' },
-    { from: 'West Bridge', to: 'Industrial Zone', time: '20 mins' }
-  ]);
-  const [loading, setLoading] = useState(true);
-  const [showTraffic, setShowTraffic] = useState(true);
-  const [showAlerts, setShowAlerts] = useState(false);
+  const mapRef = useRef(null);
+  const mapInstanceRef = useRef(null);
+  const scriptLoadedRef = useRef(false);
 
-  const API_KEY = "89806c84708b8236b2708d779f63fcce";
+  // useEffect(() => {
+  //   // Function that will be called when the script is loaded
+  //   window.loadMap = () => {
+  //     if (mapRef.current && !mapInstanceRef.current) {
+  //       try {
+  //         mapInstanceRef.current = new window.Mappls.Map('map', {
+  //           center: [28.612964, 77.229463],
+  //           zoom: 12
+  //         });
+  //         console.log("Map initialized successfully");
+  //       } catch (error) {
+  //         console.error("Error initializing map:", error);
+  //       }
+  //     }
+  //   };
 
+  //   // Load the Mappls script if not already loaded
+  //   if (!scriptLoadedRef.current) {
+  //     const script = document.createElement('script');
+  //     script.src = "https://apis.mappls.com/advancedmaps/api/YOUR_API_KEY_HERE/map_sdk?layer=vector&v=3.0&callback=loadMap";
+  //     script.async = true;
+  //     script.defer = true;
+      
+  //     script.onload = () => {
+  //       scriptLoadedRef.current = true;
+  //       console.log("Mappls script loaded");
+  //     };
+      
+  //     script.onerror = (error) => {
+  //       console.error("Error loading Mappls script:", error);
+  //     };
+      
+  //     document.head.appendChild(script);
+  //   } else if (window.Mappls) {
+  //     window.loadMap();
+  //   }
+
+  //   return () => {
+  //     // Clean up the global function when component unmounts
+  //     delete window.loadMap;
+  //     mapInstanceRef.current = null;
+  //   };
+  // }, []); // Empty dependency array ensures this runs once on mount
   useEffect(() => {
-    // Clean up any existing script
-    const existingScript = document.getElementById('mapmyindia-script');
-    if (existingScript) {
-      document.body.removeChild(existingScript);
-      mapInitializedRef.current = false;
-    }
-    
-    if (!mapContainerRef.current) {
-      console.error("Map container not available");
-      return;
-    }
-
-    const loadMapScript = () => {
-      console.log("Loading MapMyIndia script");
-      const script = document.createElement('script');
-      script.id = 'mapmyindia-script';
-      script.src = `https://apis.mapmyindia.com/advancedmaps/v1/${API_KEY}/map_load?v=1.5`;
-      script.async = true;
-      
-      script.onload = () => {
-        console.log("Script loaded successfully");
-        // Small delay to ensure DOM is ready
-        setTimeout(initializeMap, 100);
-      };
-      
-      script.onerror = (err) => {
-        console.error("Error loading script:", err);
-        setLoading(false);
-      };
-      
-      document.body.appendChild(script);
-    };
-
-    // Only load script if MapmyIndia is not already available
-    if (!window.MapmyIndia) {
-      loadMapScript();
-    } else if (!mapInitializedRef.current) {
-      initializeMap();
-    }
-
-    return () => {
-      // Cleanup on unmount
-      if (mapObject) {
-        // MapMyIndia might not have remove() method, check documentation
-        try {
-          // This might not be the correct way to remove the map
-          if (mapObject && typeof mapObject.remove === 'function') {
-            mapObject.remove();
-          }
-        } catch (e) {
-          console.log("Map cleanup error:", e);
-        }
-      }
-    };
-  }, []);
-
-  const initializeMap = () => {
-    if (mapInitializedRef.current || !window.MapmyIndia) {
-      return;
-    }
-
-    try {
-      console.log("Initializing map");
-      // Use the correct MapMyIndia map initialization
-      // Center coordinates (Delhi by default)
-      const map = new window.MapmyIndia.Map(mapContainerRef.current, {
-        center: [28.6139, 77.2090],
-        zoomControl: true,
-        hybrid: false,
-        search: false,
-        location: false,
-        zoom: 12
-      });
-
-      console.log("Map initialization successful");
-      setMapObject(map);
-      mapInitializedRef.current = true;
-      setLoading(false);
-      
-      // MapMyIndia doesn't use the same API as Leaflet/Google Maps
-      // So we need to check the actual API documentation
-      
-      // Add traffic layer if that's supported by MapMyIndia
-      if (showTraffic) {
-        try {
-          // Check if MapMyIndia supports traffic overlay plugin
-          if (window.MapmyIndia.trafficLayer) {
-            const trafficLayer = new window.MapmyIndia.trafficLayer({map: map});
-          }
-        } catch (e) {
-          console.log("Traffic layer not supported:", e);
-        }
-      }
-      
-      // Simulate having received traffic data
-      setTrafficData({
-        high: 5,
-        medium: 8,
-        low: 12
-      });
-      
-    } catch (error) {
-      console.error("Error initializing map:", error);
-      setLoading(false);
-    }
-  };
-
-  const toggleTrafficLayer = () => {
-    setShowTraffic(!showTraffic);
-    
-    if (!mapObject) return;
-    
-    try {
-      // This implementation will vary based on MapMyIndia's actual API
-      if (showTraffic) {
-        if (window.MapmyIndia.trafficLayer) {
-          new window.MapmyIndia.trafficLayer({map: mapObject});
-        }
-      } else {
-        // Remove traffic layer if possible
-        // Implementation depends on MapMyIndia API
-      }
-    } catch (e) {
-      console.error("Error toggling traffic:", e);
-    }
-  };
-
-  const toggleAlerts = () => {
-    setShowAlerts(!showAlerts);
-    
-    if (!mapObject || !showAlerts) return;
-    
-    try {
-      // Check if the Marker constructor exists and works as expected
-      if (window.MapmyIndia.Marker) {
-        // Sample incidents
-        const incidents = [
-          { lat: 28.6139, lng: 77.2290, type: 'accident' },
-          { lat: 28.6339, lng: 77.1990, type: 'construction' },
-          { lat: 28.5939, lng: 77.2190, type: 'closure' }
-        ];
-        
-        // Add markers in the MapMyIndia-specific way
-        incidents.forEach((incident) => {
-          try {
-            // This syntax might need adjustment based on MapMyIndia's API
-            new window.MapmyIndia.Marker({
-              map: mapObject,
-              position: {lat: incident.lat, lng: incident.lng},
-              // Other options as needed
-            });
-          } catch (e) {
-            console.error("Error adding marker:", e);
-          }
+    // Load Mappls API script dynamically
+    const script = document.createElement("script");
+    script.src = `https://apis.mappls.com/advancedmaps/api/${import.meta.env.VITE_MAPPLS_SDK_KEY}/map_sdk?v=3.0&layer=vector`;
+    script.async = true;
+    script.onload = () => {
+      // Ensure Mappls is available
+      if (window.mappls) {
+        // Initialize map
+        new window.mappls.Map("map", {
+          center: { lat: 28.612964, lng: 77.229463 }, // Delhi coordinates
+          zoom: 12,
         });
       }
-    } catch (e) {
-      console.error("Error showing alerts:", e);
-    }
-  };
+    };
+    document.body.appendChild(script);
 
+    return () => {
+      document.body.removeChild(script); // Cleanup on unmount
+    };
+  }, []);
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -206,15 +93,13 @@ const TrafficMap = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-gray-800 rounded-xl p-6 h-96">
-          <div 
-            ref={mapContainerRef} 
-            className="bg-gray-900 h-full w-full rounded-lg flex items-center justify-center"
-            style={{ width: '100%', height: '100%' }}
-          >
-            {loading && <p className="text-gray-400">Loading MapMyIndia Map...</p>}
-          </div>
+        <div className="lg:col-span-2 bg-gray-800 rounded-xl p-6">
+
+          <div id="map" style={{ width: "100%", height: "100%" }}></div>
         </div>
+
+      
+    </div>
 
         <div className="space-y-6">
           <div className="bg-gray-800 rounded-xl p-6">
@@ -255,9 +140,7 @@ const TrafficMap = () => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
+      </div>);
 };
 
 export default TrafficMap;
