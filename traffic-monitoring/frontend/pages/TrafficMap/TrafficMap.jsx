@@ -75,17 +75,11 @@ const TrafficMap = () => {
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Traffic Map</h2>
         <div className="flex gap-4">
-          <button 
-            className={`${showTraffic ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-600 hover:bg-gray-500'} px-4 py-2 rounded-lg flex items-center gap-2`}
-            onClick={toggleTrafficLayer}
-          >
+          <button className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg flex items-center gap-2">
             <Navigation className="w-4 h-4" />
-            <span>Traffic Layer</span>
+            <span>Route Optimization</span>
           </button>
-          <button 
-            className={`${showAlerts ? 'bg-yellow-600 hover:bg-yellow-700' : 'bg-gray-700 hover:bg-gray-600'} px-4 py-2 rounded-lg flex items-center gap-2`}
-            onClick={toggleAlerts}
-          >
+          <button className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg flex items-center gap-2">
             <AlertTriangle className="w-4 h-4" />
             <span>Show Alerts</span>
           </button>
@@ -105,17 +99,21 @@ const TrafficMap = () => {
           <div className="bg-gray-800 rounded-xl p-6">
             <h3 className="text-lg font-semibold mb-4">Traffic Density Analysis</h3>
             <div className="space-y-4">
-              {[
-                {level: 'High', count: trafficData.high, color: 'text-red-500'},
-                {level: 'Medium', count: trafficData.medium, color: 'text-yellow-500'},
-                {level: 'Low', count: trafficData.low, color: 'text-green-500'}
-              ].map((density) => (
-                <div key={density.level} className="flex items-center justify-between bg-gray-700 p-4 rounded-lg">
+              {['High', 'Medium', 'Low'].map((density) => (
+                <div key={density} className="flex items-center justify-between bg-gray-700 p-4 rounded-lg">
                   <div className="flex items-center gap-3">
-                    <MapPin className={`w-5 h-5 ${density.color}`} />
-                    <span>{density.level} Density Areas</span>
+                    <MapPin className={`w-5 h-5 ${
+                      density === 'High' ? 'text-red-500' :
+                      density === 'Medium' ? 'text-yellow-500' :
+                      'text-green-500'
+                    }`} />
+                    <span>{density} Density Areas</span>
                   </div>
-                  <span className="font-semibold">{density.count}</span>
+                  <span className="font-semibold">{
+                    density === 'High' ? '5' :
+                    density === 'Medium' ? '8' :
+                    '12'
+                  }</span>
                 </div>
               ))}
             </div>
@@ -124,7 +122,11 @@ const TrafficMap = () => {
           <div className="bg-gray-800 rounded-xl p-6">
             <h3 className="text-lg font-semibold mb-4">Alternative Routes</h3>
             <div className="space-y-3">
-              {alternativeRoutes.map((route, index) => (
+              {[
+                { from: 'Central Station', to: 'Business District', time: '15 mins' },
+                { from: 'North Avenue', to: 'Shopping Mall', time: '12 mins' },
+                { from: 'West Bridge', to: 'Industrial Zone', time: '20 mins' },
+              ].map((route, index) => (
                 <div key={index} className="bg-gray-700 p-4 rounded-lg">
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-medium">{route.from}</span>

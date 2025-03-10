@@ -121,7 +121,7 @@ const features = [
 const teamMembers = [
   {
     name: "Arsh Tiwari",
-    image: "/placeholder.svg?height=300&width=300",
+    image: "/arsh.png?height=300&width=300",
     socials: {
       github: "#",
       linkedin: "#",
@@ -130,7 +130,7 @@ const teamMembers = [
   },
   {
     name: "Priyanshi Bothra",
-    image: "/placeholder.svg?height=300&width=300",
+    image: "/priyanshi.png?height=300&width=300",
     socials: {
       github: "#",
       linkedin: "#",
@@ -163,7 +163,7 @@ const Home = () => {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative h-screen flex flex-col items-center justify-center text-center px-4 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 ">
+      <section className="relative h-screen flex flex-col items-center justify-center text-center px-4  ">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black z-10"></div>
           <video autoPlay loop muted className="w-full h-full object-cover">
@@ -240,7 +240,7 @@ const Home = () => {
             </div>
             <div className="rounded-lg overflow-hidden shadow-xl border border-gray-700">
               <img
-                src="/image.png?height=400&width=600"
+                src="/ambulance.png?height=400&width=600"
                 alt="Traffic Management System"
                 className="w-full h-auto"
               />
