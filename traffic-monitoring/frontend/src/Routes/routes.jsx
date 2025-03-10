@@ -15,39 +15,39 @@ export const router = createBrowserRouter([
     {
         path: "/",
         element: <Home />,
-      },
+    },
     {
-      element: <DashboardLayout />,
-      children: [
-        {
-          path: "/dashboard",
-          element: <Dashboard />,
-        },
-        {
-            path: "/map",
-            element: <TrafficMap />,
-        },
-        {
-            path: "/monitoring",
-            element: <LiveMonitoring />,
-        },
-        {
-            path: "/cctv",
-            element: <CCTVFeeds />,
-        },
-        {
-            path: "/alerts",
-            element: <Alerts />,
-        },
-        {
-            path: "/analytics",
-            element: <Analytics />,
-        },
-        {
-            path: "/settings",
-            element: <Settings />,
-        },
-      ]
+        element: <DashboardLayout />,
+        children: [
+            {
+                path: "/dashboard",
+                element: <Dashboard />,
+            },
+            {
+                path: "/map",
+                element: <TrafficMap />,
+            },
+            {
+                path: "/monitoring",
+                element: <LiveMonitoring />,
+            },
+            {
+                path: "/cctv",
+                element: <CCTVFeeds />,
+            },
+            {
+                path: "/alerts",
+                element: <Alerts />,
+            },
+            {
+                path: "/analytics",
+                element: <Analytics />,
+            },
+            {
+                path: "/settings",
+                element: <Settings />,
+            },
+        ]
     },
     // {
     //   path: "*",
@@ -57,4 +57,4 @@ export const router = createBrowserRouter([
     //   path: "/coming-soon",
     //   element: <ComingSoon/>,
     // }
-  ]);
+]);
