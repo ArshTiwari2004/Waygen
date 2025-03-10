@@ -4,7 +4,7 @@ import DashboardLayout from '../Layout/DashboardLayout';
 import Dashboard from '../../pages/Dashboard/Dashboard';
 import TrafficMap from '../../pages/TrafficMap/TrafficMap';
 import LiveMonitoring from '../../pages/LiveMonitoring/LiveMonitoring';
-import CCTVFeeds from '../../pages/CCTVFeeds.jsx/CCTVFeeds';
+import CCTVFeeds from '../../pages/CCTVFeeds/CCTVFeeds';
 import Alerts from '../../pages/Alerts/Alerts';
 import Analytics from '../../pages/Analytics/Analytics';
 import Settings from '../../pages/Settings/Settings';
