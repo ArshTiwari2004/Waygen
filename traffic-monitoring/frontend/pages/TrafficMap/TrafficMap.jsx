@@ -111,6 +111,7 @@ const TrafficMap = () => {
   };
 
   useEffect(() => {
+
     mapplsClassObject.initialize(import.meta.env.VITE_MAPPLS_SDK_KEY, loadObject, () => {
       if (mapRef.current) {
         mapRef.current.remove();
@@ -146,10 +147,13 @@ const TrafficMap = () => {
             },
           });
         });
+
       });
 
       mapRef.current = newMap;
     });
+
+
 
     return () => {
       if (mapRef.current) {
