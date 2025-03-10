@@ -205,7 +205,7 @@ const ParticleBackground = () => {
         this.size = Math.random() * 2 + 0.5;
         this.speedX = Math.random() * 0.5 - 0.25;
         this.speedY = Math.random() * 0.5 - 0.25;
-        this.color = `rgba(${30 + Math.random() * 20}, ${100 + Math.random() * 50}, ${200 + Math.random() * 55}, ${0.3 + Math.random() * 0.4})`;
+        this.color = `rgba(${30 + Math.random() * 20}, ${100 + Math.random() * 50}, ${200 + Math.random() * 55}, ${0.6 + Math.random() * 0.4})`;
       }
       
       update() {
