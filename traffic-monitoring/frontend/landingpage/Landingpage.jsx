@@ -128,12 +128,12 @@ const features = [
     description:
       "Stores traffic trends in MongoDB for long-term analytics, generates reports & visualizations for city planners, and predicts peak hours & congestion patterns.",
   },
-  {
-    icon: "⿧",
-    title: "SMS & Push Notifications",
-    description:
-      "Sends congestion alerts via SMS/WhatsApp and notifies nearby vehicles when an ambulance is approaching for emergency vehicle priority.",
-  },
+  //{
+   // icon: "⿧",
+   // title: "SMS & Push Notifications",
+   // description:
+     // "Sends congestion alerts via SMS/WhatsApp and notifies nearby vehicles when an ambulance is approaching for emergency vehicle priority.",
+  //},
 ];
 
 // Team Members Data
@@ -158,10 +158,11 @@ const teamMembers = [
   },
   {
     name: "Nibedan Pati",
-    image: "/placeholder.svg?height=300&width=300",
+    image: "/nibedan.png?height=300&width=300",
     socials: {
       github: "#",
       linkedin: "#",
+      twitter: "#",
     },
   },
   {
@@ -205,7 +206,7 @@ const ParticleBackground = () => {
         this.size = Math.random() * 2 + 0.5;
         this.speedX = Math.random() * 0.5 - 0.25;
         this.speedY = Math.random() * 0.5 - 0.25;
-        this.color = `rgba(${30 + Math.random() * 20}, ${100 + Math.random() * 50}, ${200 + Math.random() * 55}, ${0.3 + Math.random() * 0.4})`;
+        this.color = `rgb(255, 255, 255)`;
       }
       
       update() {
@@ -247,7 +248,7 @@ const ParticleBackground = () => {
           
           if (distance < maxDistance) {
             const opacity = 1 - (distance / maxDistance);
-            ctx.strokeStyle = `rgba(100, 150, 255, ${opacity * 0.2})`;
+            ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.2})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
