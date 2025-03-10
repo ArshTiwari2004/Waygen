@@ -1,36 +1,55 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ArrowRight, Github, Linkedin, Twitter } from 'lucide-react';
 import Navbar from './Navbar';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Button Component
 const Button = ({ asChild, size, className, children, onClick }) => {
   return (
-    <button
+    <motion.button
       onClick={onClick}
       className={`${size === 'lg' ? 'py-3 text-lg' : 'py-2'} ${className}`}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
     >
       {children}
-    </button>
+    </motion.button>
   );
 };
 
 // Feature Card Component
-const FeatureCard = ({ icon, title, description }) => {
+const FeatureCard = ({ icon, title, description, index }) => {
   return (
-    <div className="bg-gray-800/80 backdrop-blur-sm rounded-lg p-6 h-full flex flex-col border border-gray-700 shadow-xl hover:shadow-blue-900/10 hover:border-blue-900/30 transition-all duration-300">
+    <motion.div 
+      className="bg-gray-800/80 backdrop-blur-sm rounded-lg p-6 h-full flex flex-col border border-gray-700 shadow-xl hover:shadow-blue-900/10 hover:border-blue-900/30 transition-all duration-300"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+    >
       <div className="bg-blue-900/20 p-3 rounded-lg w-fit mb-4">
         <span className="text-blue-300 text-2xl">{icon}</span>
       </div>
       <h3 className="text-xl font-bold mb-3 text-blue-300">{title}</h3>
       <p className="text-gray-100 flex-grow">{description}</p>
-    </div>
+    </motion.div>
   );
 };
 
 // Team Member Component
-const TeamMember = ({ name, role, image, techStack, socials }) => {
+const TeamMember = ({ name, role, image, techStack, socials, index }) => {
   return (
-    <div className="bg-gray-800/80 backdrop-blur-sm rounded-lg overflow-hidden border border-gray-700 shadow-xl hover:shadow-blue-900/10 hover:border-blue-900/30 transition-all duration-300">
+    <motion.div 
+      className="bg-gray-800/80 backdrop-blur-sm rounded-lg overflow-hidden border border-gray-700 shadow-xl hover:shadow-blue-900/10 hover:border-blue-900/30 transition-all duration-300"
+      initial={{ opacity: 0, scale: 0.9 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.4, delay: index * 0.1 }}
+      whileHover={{ y: -5 }}
+    >
       <img src={image || "/placeholder.svg"} alt={name} className="w-full h-64 object-cover" />
       <div className="p-6">
         <h3 className="text-xl font-bold mb-1 text-blue-300">{name}</h3>
@@ -67,7 +86,7 @@ const TeamMember = ({ name, role, image, techStack, socials }) => {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -156,47 +175,203 @@ const teamMembers = [
   },
 ];
 
+// Animated Particle Background Component
+const ParticleBackground = () => {
+  const canvasRef = useRef(null);
+  
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    let animationFrameId;
+    
+    // Set canvas dimensions
+    const setCanvasDimensions = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    
+    setCanvasDimensions();
+    window.addEventListener('resize', setCanvasDimensions);
+    
+    // Particle class
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = Math.random() * 0.5 - 0.25;
+        this.speedY = Math.random() * 0.5 - 0.25;
+        this.color = `rgba(${30 + Math.random() * 20}, ${100 + Math.random() * 50}, ${200 + Math.random() * 55}, ${0.3 + Math.random() * 0.4})`;
+      }
+      
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        
+        if (this.x > canvas.width) this.x = 0;
+        else if (this.x < 0) this.x = canvas.width;
+        
+        if (this.y > canvas.height) this.y = 0;
+        else if (this.y < 0) this.y = canvas.height;
+      }
+      
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    
+    // Create particles
+    const particlesArray = [];
+    const numberOfParticles = Math.min(100, window.innerWidth / 20);
+    
+    for (let i = 0; i < numberOfParticles; i++) {
+      particlesArray.push(new Particle());
+    }
+    
+    // Connect particles with lines
+    function connectParticles() {
+      const maxDistance = 150;
+      
+      for (let a = 0; a < particlesArray.length; a++) {
+        for (let b = a; b < particlesArray.length; b++) {
+          const dx = particlesArray[a].x - particlesArray[b].x;
+          const dy = particlesArray[a].y - particlesArray[b].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < maxDistance) {
+            const opacity = 1 - (distance / maxDistance);
+            ctx.strokeStyle = `rgba(100, 150, 255, ${opacity * 0.2})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+    
+    // Animation loop
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw gradient background
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, '#0a192f');
+      gradient.addColorStop(1, '#112240');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Update and draw particles
+      for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+        particlesArray[i].draw();
+      }
+      
+      connectParticles();
+      
+      animationFrameId = requestAnimationFrame(animate);
+    };
+    
+    animate();
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', setCanvasDimensions);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+  
+  return <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full -z-10" />;
+};
+
+// Simple animation variants for consistent use
+const fadeIn = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 }
+};
+
 const Home = () => {
   return (
-     <div className="min-h-screen w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 ">
+    <div className="min-h-screen w-full relative overflow-hidden">
+      {/* Animated Background */}
+      <ParticleBackground />
+      
       {/* Navbar */}
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative h-screen flex flex-col items-center justify-center text-center px-4  ">
+      <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-4">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black z-10"></div>
-          <video autoPlay loop muted className="w-full h-full object-cover">
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black/80 z-10"></div>
+          <video autoPlay loop muted playsInline className="w-full h-full object-cover">
             <source
               src="https://assets.mixkit.co/videos/preview/mixkit-cars-driving-on-a-city-street-at-night-34573-large.mp4"
               type="video/mp4"
             />
+            Your browser does not support the video tag.
           </video>
         </div>
 
         <div className="z-10 max-w-5xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">Way</span>
-            <span className="text-blue-300">Gen</span>
-          </h1>
-          <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-100">
-            AI-powered roads, seamless journeys – Built with MapMyIndia
-          </p>
-          
-          <div className="flex justify-center items-center mt-6">
-         <Button
-           size="lg"
-           className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-full px-10 py-4 shadow-lg shadow-blue-500/30 font-medium flex items-center transition-all duration-300 text-lg"
-           onClick={() => window.location.href = '/dashboard'}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
           >
-           Get Started <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
-         </div>
-
-
+            <motion.h1 
+              className="text-5xl md:text-7xl font-bold mb-6 tracking-tight"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ 
+                duration: 0.8,
+                type: "spring",
+                stiffness: 100
+              }}
+            >
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300 inline-block">Way</span>
+              <span className="text-blue-300 inline-block">Gen</span>
+            </motion.h1>
+          </motion.div>
+          
+          <motion.p 
+            className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-100"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+          >
+            AI-powered roads, seamless journeys – Built with MapMyIndia
+          </motion.p>
+          
+          <motion.div 
+            className="flex justify-center items-center mt-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            <Button
+              size="lg"
+              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-full px-10 py-4 shadow-lg shadow-blue-500/30 font-medium flex items-center transition-all duration-300 text-lg"
+              onClick={() => window.location.href = '/dashboard'}
+            >
+              Get Started <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </motion.div>
         </div>
 
-        <div className="absolute bottom-10 left-0 right-0 z-10 flex justify-center">
+        <motion.div 
+          className="absolute bottom-10 left-0 right-0 z-10 flex justify-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 1 }}
+        >
           <a href="#about" className="animate-bounce">
             <svg
               className="w-6 h-6 text-white"
@@ -210,23 +385,36 @@ const Home = () => {
               <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
             </svg>
           </a>
-        </div>
+        </motion.div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-gradient-to-b from-black to-gray-900">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center mb-16">
+      <section id="about" className="py-20 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/90 to-black/80 backdrop-blur-sm"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div 
+            className="max-w-3xl mx-auto text-center mb-16"
+            variants={fadeIn}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+          >
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-blue-300">Revolutionizing Traffic Management</h2>
             <p className="text-lg text-gray-100">
               WayGen combines cutting-edge AI technology with MapMyIndia's powerful mapping capabilities to create
               intelligent traffic management systems that reduce congestion, improve emergency response times, and make
               our roads safer for everyone.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div>
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6 }}
+            >
               <h3 className="text-2xl font-bold mb-4 text-blue-300">Our Mission</h3>
               <p className="text-gray-100 mb-6">
                 To transform urban mobility through intelligent traffic systems that adapt to real-time conditions,
@@ -237,38 +425,74 @@ const Home = () => {
                 A world where traffic flows seamlessly, emergency vehicles reach their destinations without delay, and
                 cities can make data-driven decisions to improve infrastructure.
               </p>
-            </div>
-            <div className="rounded-lg overflow-hidden shadow-xl border border-gray-700">
+            </motion.div>
+            <motion.div 
+              className="rounded-lg overflow-hidden shadow-xl border border-gray-700"
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
               <img
                 src="/ambulance.png?height=400&width=600"
                 alt="Traffic Management System"
                 className="w-full h-auto"
               />
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 bg-gray-900">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold mb-16 text-center text-blue-300">Key Features</h2>
+      <section id="features" className="py-20 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 to-black/90 backdrop-blur-sm"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.h2 
+            className="text-3xl md:text-4xl font-bold mb-16 text-center text-blue-300"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+          >
+            Key Features
+          </motion.h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <FeatureCard key={index} icon={feature.icon} title={feature.title} description={feature.description} />
+              <FeatureCard 
+                key={index} 
+                icon={feature.icon} 
+                title={feature.title} 
+                description={feature.description}
+                index={index}
+              />
             ))}
           </div>
         </div>
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="py-20 bg-gray-900">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold mb-16 text-center text-blue-300">How It Works</h2>
+      <section id="how-it-works" className="py-20 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/90 to-black/80 backdrop-blur-sm"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.h2 
+            className="text-3xl md:text-4xl font-bold mb-16 text-center text-blue-300"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+          >
+            How It Works
+          </motion.h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="bg-gray-800/80 backdrop-blur-sm rounded-lg p-8 text-center border border-gray-700 shadow-xl hover:shadow-blue-900/10 hover:border-blue-900/30 transition-all duration-300">
+            <motion.div 
+              className="bg-gray-800/80 backdrop-blur-sm rounded-lg p-8 text-center border border-gray-700 shadow-xl hover:shadow-blue-900/10 hover:border-blue-900/30 transition-all duration-300"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.5 }}
+            >
               <div className="w-16 h-16 bg-blue-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span className="text-blue-300 text-2xl font-bold">1</span>
               </div>
@@ -277,9 +501,15 @@ const Home = () => {
                 Our system collects real-time traffic data from CCTV cameras, drones, and MapMyIndia APIs to analyze
                 current road conditions.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="bg-gray-800/80 backdrop-blur-sm rounded-lg p-8 text-center border border-gray-700 shadow-xl hover:shadow-blue-900/10 hover:border-blue-900/30 transition-all duration-300">
+            <motion.div 
+              className="bg-gray-800/80 backdrop-blur-sm rounded-lg p-8 text-center border border-gray-700 shadow-xl hover:shadow-blue-900/10 hover:border-blue-900/30 transition-all duration-300"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
               <div className="w-16 h-16 bg-blue-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span className="text-blue-300 text-2xl font-bold">2</span>
               </div>
@@ -288,9 +518,15 @@ const Home = () => {
                 Our YOLOv8 object detection algorithms analyze the data to identify vehicles, measure congestion, and
                 make intelligent decisions.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="bg-gray-800/80 backdrop-blur-sm rounded-lg p-8 text-center border border-gray-700 shadow-xl hover:shadow-blue-900/10 hover:border-blue-900/30 transition-all duration-300">
+            <motion.div 
+              className="bg-gray-800/80 backdrop-blur-sm rounded-lg p-8 text-center border border-gray-700 shadow-xl hover:shadow-blue-900/10 hover:border-blue-900/30 transition-all duration-300"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
               <div className="w-16 h-16 bg-blue-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span className="text-blue-300 text-2xl font-bold">3</span>
               </div>
@@ -299,15 +535,24 @@ const Home = () => {
                 The system automatically adjusts traffic signals, sends notifications, and provides real-time updates to
                 improve traffic flow.
               </p>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Team Section */}
-      <section id="team" className="py-20 bg-gray-900">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold mb-16 text-center text-blue-300">Meet The Team</h2>
+      <section id="team" className="py-20 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 to-black/90 backdrop-blur-sm"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.h2 
+            className="text-3xl md:text-4xl font-bold mb-16 text-center text-blue-300"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+          >
+            Meet The Team
+          </motion.h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {teamMembers.map((member, index) => (
@@ -318,6 +563,7 @@ const Home = () => {
                 image={member.image}
                 techStack={member.techStack}
                 socials={member.socials}
+                index={index}
               />
             ))}
           </div>
@@ -325,27 +571,36 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-900 to-indigo-900">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">Ready to Transform Traffic Management?</h2>
-          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Join us in creating smarter, more efficient roads with AI-powered traffic solutions.
-          </p>
-          <div className="flex justify-center items-center mt-6">
-         <Button
-           size="lg"
-           className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-full px-10 py-4 shadow-lg shadow-blue-500/30 font-medium flex items-center transition-all duration-300 text-lg"
-           onClick={() => window.location.href = '/dashboard'}
+      <section className="py-20 relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-indigo-900/90 backdrop-blur-sm"></div>
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
           >
-           Get Started <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
-         </div>
-         </div>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">Ready to Transform Traffic Management?</h2>
+            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+              Join us in creating smarter, more efficient roads with AI-powered traffic solutions.
+            </p>
+            <div className="flex justify-center items-center mt-6">
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-full px-10 py-4 shadow-lg shadow-blue-500/30 font-medium flex items-center transition-all duration-300 text-lg"
+                onClick={() => window.location.href = '/dashboard'}
+              >
+                Get Started <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </div>
+          </motion.div>
+        </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-black py-12">
-        <div className="container mx-auto px-4">
+      <footer className="bg-black/90 py-12 relative">
+        <div className="absolute inset-0 bg-black/90 backdrop-blur-sm"></div>
+        <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
               <h3 className="text-xl font-bold mb-4 text-blue-300">WayGen</h3>
@@ -423,4 +678,7 @@ const Home = () => {
 };
 
 export default Home;
+
+
+
 
