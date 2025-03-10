@@ -22,10 +22,10 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="h-screen w-64 bg-gray-900 text-white p-4">
-      <div className="flex items-center gap-3 mb-8">
+    <div className="h-100% w-64 bg-gray-900 text-white p-4">
+      <div className="flex items-center gap-3 mb-8 cursor-pointer" onClick={() => window.location.href = '/'}>
         <Map className="w-8 h-8 text-blue-500" />
-        <h1 className="text-xl font-bold">Traffic Management</h1>
+        <h1 className="text-xl font-bold">WayGen</h1>
       </div>
       <nav>
         {navItems.map((item) => (
