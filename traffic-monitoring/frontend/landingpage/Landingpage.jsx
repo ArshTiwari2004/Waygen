@@ -167,7 +167,7 @@ const teamMembers = [
   },
   {
     name: "Apoorv Mittal",
-    image: "/placeholder.svg?height=300&width=300",
+    image: "/apoorv.jpg?height=300&width=300",
     socials: {
       github: "#",
       linkedin: "#",
