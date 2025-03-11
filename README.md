@@ -6,10 +6,10 @@
 
 <div align="center">
   <a href="https://waygen.vercel.app" target="_blank">
-    <img src="https://img.shields.io/badge/Visit%20Athleto%20Project-4C9DFF?style=for-the-badge&logo=vercel&logoColor=white" alt="Athleto Project" />
+    <img src="https://img.shields.io/badge/Visit%20Athleto%20Project-4C9DFF?style=for-the-badge&logo=vercel&logoColor=white" alt="WayGen Project" />
   </a>
   <br><br>
-  <p style="font-size: 16px; color: #666;">Click the button above to visit the live version of the Athleto project hosted on Vercel.</p>
+  <p style="font-size: 16px; color: #666;">Click the button above to visit the live version of the WayGen project hosted on Vercel.</p>
 </div>
 
 
