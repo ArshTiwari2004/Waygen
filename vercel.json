@@ -1,4 +1,10 @@
 {
+    "projects": [
+        {
+            "name": "frontend",
+            "rootDirectory": "traffic-monitoring/frontend"
+        },
+    ],
     "rewrites": [
       { "source": "/(.*)", "destination": "/" }
     ],
