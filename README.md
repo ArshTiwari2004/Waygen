@@ -174,11 +174,10 @@ Waygen/
 
 ## 🔮 Future Enhancements
 
-- Integration with smart city initiatives
-- Mobile app for commuter alerts and feedback
-- Machine learning models for predictive traffic management
-- Expansion to pedestrian flow optimization
-- Integration with autonomous vehicle systems
+- AI-powered license plate recognition 
+- Reinforcement learning can optimize signal patterns dynamically based on historical and real-time traffic flow
+- Detect accidents or vehicle breakdowns.
+
 
 ## 🤝 Contributing
 #### Contributions are welcome! Please feel free to submit a Pull Request.
