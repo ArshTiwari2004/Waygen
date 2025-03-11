@@ -1,0 +1,6 @@
+{
+  "root": "traffic-monitoring/frontend",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ]
+}
